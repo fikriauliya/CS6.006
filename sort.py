@@ -28,3 +28,32 @@ def merge_sort(seq):
       return merged
 
   return merge_sort_rec(0, len(seq) - 1)
+
+def min_heap_sort(seq):
+  def min_heapify(seq, index):
+    left = index * 2 + 1
+    right = index * 2 + 2
+
+    if left >= len(seq): return
+    elif seq[index] <= seq[left] and (right >= len(seq) or seq[index] <= seq[right]): return
+    elif (right >= len(seq) or seq[left] <= seq[right]):
+      seq[index], seq[left] = seq[left], seq[index]
+      min_heapify(seq, left)
+    else:
+      seq[index], seq[right] = seq[right], seq[index]
+      min_heapify(seq, right)
+
+  def extract_min(seq):
+    (seq[0], seq[len(seq)-1]) = (seq[len(seq)-1], seq[0])
+    res = seq.pop()
+    min_heapify(seq, 0)
+    return res
+
+  for i in range((len(seq)-2)//2, -1, -1):
+    min_heapify(seq, i)
+
+  sorted_seq = []
+  while len(seq) > 0:
+    sorted_seq.append(extract_min(seq))
+
+  return sorted_seq
