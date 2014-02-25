@@ -28,5 +28,9 @@ class TestSort(unittest.TestCase):
     for t in self.testcases:
       self.assertEqual(binary_search_tree_sort(t[0]), t[1])
 
+  def test_counting_sort(self):
+    for t in self.testcases:
+      self.assertEqual(counting_sort(t[0]), t[1])
+
 if __name__ == "__main__":
   unittest.main()

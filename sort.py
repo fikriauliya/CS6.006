@@ -108,3 +108,21 @@ def binary_search_tree_sort(seq):
   for s in seq:
     root.add(s)
   return root.in_order()
+
+
+# O(n)
+def counting_sort(seq, min=-100, max=100):
+  size = max - min + 1
+
+  counts = [0] * size
+
+  for s in seq:
+    counts[s] += 1
+
+  k = 0
+  for i in range(min, max+1):
+    for j in range(counts[i]):
+      seq[k] = i
+      k += 1
+
+  return seq
