@@ -24,5 +24,9 @@ class TestSort(unittest.TestCase):
     for t in self.testcases:
       self.assertEqual(min_heap_sort(t[0]), t[1])
 
+  def test_binary_search_tree_sort(self):
+    for t in self.testcases:
+      self.assertEqual(binary_search_tree_sort(t[0]), t[1])
+
 if __name__ == "__main__":
   unittest.main()
