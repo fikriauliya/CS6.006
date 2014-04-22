@@ -1,3 +1,5 @@
+from math import log
+
 # O(n^2)
 def insertion_sort(seq):
   for i in range(0,len(seq)):
@@ -113,7 +115,6 @@ def binary_search_tree_sort(seq):
 # O(n)
 def counting_sort(seq, min=-100, max=100):
   size = max - min + 1
-
   counts = [0] * size
 
   for s in seq:
@@ -126,3 +127,28 @@ def counting_sort(seq, min=-100, max=100):
       k += 1
 
   return seq
+
+# O(n)
+def counting_sort_with_key(seq, key_func, min=-100, max=100):
+  size = max - min + 1
+  orderedList = [[] for _ in range(0, size)]
+
+  for s in seq:
+    key = key_func(s)
+    orderedList[key - min].append(s)
+
+  outputs = []
+  for els in orderedList:
+    outputs.extend(els)
+  return outputs
+
+# O(kn)
+def radix_sort(seq, base):
+  if len(seq) > 0:
+    digit_length = round(log(max([abs(s) for s in seq]), base)) + 1
+    orderedList = seq
+    for i in range(1, digit_length + 1):
+      orderedList = counting_sort_with_key(orderedList, lambda x: ((abs(x)//(base**(i-1)))%base) * (x//abs(x)), -9, 9)
+    return orderedList
+  else:
+    return []
