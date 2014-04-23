@@ -29,10 +29,23 @@ class TestSort(unittest.TestCase):
     self.assertEqual(hash.get(3), (3, "san"))
     self.assertNotEqual(hash.get(3), (3, "three"))
 
-    self.assertEqual(hash.hash_size(), 10)
+    self.assertEqual(hash.filled_size, 10)
+    self.assertEqual(hash.size, 16)
     hash.remove(3)
     self.assertEqual(hash.get(3), None)
-    self.assertEqual(hash.hash_size(), 9)
+    self.assertEqual(hash.filled_size, 9)
+    self.assertEqual(hash.size, 16)
+
+    hash.remove(1)
+    hash.remove(2)
+    self.assertEqual(hash.filled_size, 7)
+    self.assertEqual(hash.size, 16)
+
+    hash.remove(7)
+    hash.remove(8)
+    hash.remove(9)
+    self.assertEqual(hash.filled_size, 4)
+    self.assertEqual(hash.size, 8)
 
 if __name__ == "__main__":
   unittest.main()

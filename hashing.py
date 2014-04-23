@@ -56,5 +56,12 @@ class HashWithChaining:
       del self.hash_indices[hashed_key][matched_key_value_index]
       self.filled_size -= 1
 
-  def hash_size(self):
-    return self.filled_size
+      if self.filled_size <= self.size // 4:
+        new_table_doubling = HashWithChaining(self.size // 2)
+
+        for hash_index in self.hash_indices:
+          for key_value_pair in hash_index:
+            new_table_doubling.put(key_value_pair[0], key_value_pair[1])
+
+        self.size = self.size // 2
+        self.hash_indices = new_table_doubling.hash_indices
