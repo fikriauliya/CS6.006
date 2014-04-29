@@ -52,5 +52,24 @@ class WeightedGraphTest(unittest.TestCase):
     # {'C': 7, 'B': 18, 'A': 0, 'E': 12, 'D': 22}
     # {'C': 'A', 'B': 'C', 'A': -1, 'E': 'C', 'D': 'C'}
 
+  def test_djikstra_single_target(self):
+    g = WeightedGraph()
+
+    g.append_edge('A', 'B', 19, False)
+    g.append_edge('A', 'C', 7, False)
+    g.append_edge('B', 'C', 11, False)
+    g.append_edge('B', 'D', 4, False)
+    g.append_edge('C', 'D', 15, False)
+    g.append_edge('C', 'E', 5, False)
+    g.append_edge('D', 'E', 13, False)
+
+    g.print()
+    parent, shortest_distances = g.djikstre_single_target('A', 'C')
+    print(shortest_distances)
+    print(parent)
+
+    # {'D': 22, 'E': 12, 'A': 0, 'B': 18, 'C': 7}
+    # {'D': 'C', 'E': 'C', 'A': -1, 'B': 'C', 'C': 'A'}
+
 if __name__ == "__main__":
   unittest.main()

@@ -72,3 +72,27 @@ class WeightedGraph:
           raise Exception("Cycle detected")
 
     return (parent, distance)
+
+  def djikstre_single_target(self, start, target):
+    frontiers = [(0, start)]
+
+    parent = {v:-1 for v in self.adj_list}
+    distance = {v:sys.maxsize for v in self.adj_list}
+    distance[start] = 0
+    found = set()
+
+    while frontiers:
+      smallest_distance, smallest_vertex = heapq.heappop(frontiers)
+
+      if not smallest_vertex in found:
+        found.add(smallest_vertex)
+        if smallest_vertex == target:
+          return (parent, distance)
+
+        for v, w in self.adj_list[smallest_vertex]:
+          if smallest_distance + w < distance[v]:
+            distance[v] = smallest_distance + w
+            parent[v] = smallest_vertex
+            heapq.heappush(frontiers, (distance[v], v))
+
+    return (parent, distance)
