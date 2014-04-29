@@ -96,3 +96,7 @@ class WeightedGraph:
             heapq.heappush(frontiers, (distance[v], v))
 
     return (parent, distance)
+
+  def djikstra_bidirection(self, start, target):
+    # TODO
+    pass
