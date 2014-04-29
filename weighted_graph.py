@@ -25,6 +25,7 @@ class WeightedGraph:
 
       self.adj_list[destination_vertex].append((source_vertex, weight))
 
+  # Single source shortest path
   # O(V lg V + E lg V)
   # Using Fibonacci heap: O(V lg V + E)
   def djikstra(self, start):
@@ -48,3 +49,26 @@ class WeightedGraph:
             heapq.heappush(frontier, (distances[v], v))
 
     return (parent, distances)
+
+  # Single source shortest path, allow negative weight but not negative cycle
+  # O(|V| |E|)
+  def bellman_ford(self, start):
+    distance = {v:sys.maxsize for v in self.adj_list.keys()}
+    parent = {v:-1 for v in self.adj_list.keys()}
+    distance[start] = 0
+
+    for i in range(len(self.adj_list.keys()) - 1):
+      # For each edges
+      for v1 in self.adj_list:
+        for v2, w in self.adj_list[v1]:
+          if distance[v1] + w < distance[v2]:
+            parent[v2] = v1
+            distance[v2] = distance[v1] + w
+
+    # Check for cycle
+    for v1 in self.adj_list:
+      for v2, w in self.adj_list[v1]:
+        if distance[v1] + w < distance[v2]:
+          raise Exception("Cycle detected")
+
+    return (parent, distance)
