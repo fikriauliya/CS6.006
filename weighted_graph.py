@@ -6,6 +6,7 @@ import heapq
 class WeightedGraph:
   def __init__(self, graph_ascii = ''):
     self.adj_list = dict()
+    self.reversed_adj_list = dict()
 
   def print(self):
     for v1 in self.adj_list:
@@ -18,12 +19,20 @@ class WeightedGraph:
     if not source_vertex in self.adj_list:
       self.adj_list[source_vertex] = []
 
+    if not destination_vertex in self.reversed_adj_list:
+      self.reversed_adj_list[destination_vertex] = []
+
     self.adj_list[source_vertex].append((destination_vertex, weight))
+    self.reversed_adj_list[destination_vertex].append((source_vertex, weight))
+
     if not directed:
       if not destination_vertex in self.adj_list:
         self.adj_list[destination_vertex] = []
+      if not source_vertex in self.reversed_adj_list:
+        self.reversed_adj_list[source_vertex] = []
 
       self.adj_list[destination_vertex].append((source_vertex, weight))
+      self.reversed_adj_list[source_vertex].append((destination_vertex, weight))
 
   # Single source shortest path
   # O(V lg V + E lg V)
@@ -71,6 +80,36 @@ class WeightedGraph:
         if distance[v1] + w < distance[v2]:
           raise Exception("Cycle detected")
 
+    return (parent, distance)
+
+  def bellman_form_memoization(self, start):
+    vertex_count = len(self.adj_list.keys())
+    distance_memo = {v:[None for k in range(vertex_count)] for v in self.adj_list.keys()}
+    parent = {v:-1 for v in self.adj_list.keys()}
+
+    def rec(k, target):
+      if k <= 0: return sys.maxsize
+      if distance_memo[target][k] != None: return distance_memo[target][k]
+      res = 0
+
+      if target == start:
+        res = 0
+      else:
+        min_dist = sys.maxsize
+        for v, w in self.reversed_adj_list[target]:
+          dist = rec(k - 1, v) + w
+          if dist < min_dist:
+            min_dist = dist
+            parent[target] = v
+
+        res = min_dist
+
+      distance_memo[target][k] = res
+      return res
+
+    distance = {}
+    for target in self.adj_list.keys():
+      distance[target] = rec(vertex_count - 1, target)
     return (parent, distance)
 
   def djikstre_single_target(self, start, target):
